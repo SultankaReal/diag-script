@@ -1,2 +1,0 @@
-# diag-script
-diag-script
