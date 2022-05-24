@@ -75,6 +75,9 @@ echo "-----------------------------------" &>> $FILE_PVC_PV
 kubectl get pvc $pvc_name -n $pvc_namespace &>> $FILE_PVC_PV
 echo "-----------------------------------" &>> $FILE_PVC_PV
 kubectl get pvc $pvc_name -n $pvc_namespace -o yaml &>> $FILE_PVC_PV
+else 
+echo "У тебя нет проблем с PV/PVC, круто!"
+rm $FILE_PVC_PV
 fi
 
 # Operations
