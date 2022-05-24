@@ -21,11 +21,6 @@ date >> $FILE_LOG
 echo "-----------------------------------" &>> $FILE_LOG
 echo "Введите cluster-id k8s кластера: "
 read cluster_id
-# echo $cluster_id > new.txt
-# number = (wc -c new.txt | awk '{print $1}')
-# echo $number
-# if [ $number -eq 21 ];
-# then
 echo "Описание кластера: " &>> $FILE_LOG
 yc managed-kubernetes cluster get --id=$cluster_id &>> $FILE_LOG
 echo "Подключаемся к кластеру k8s: " &>> $FILE_LOG
@@ -49,9 +44,6 @@ echo "Дескрайб пода: " &>> $FILE_LOG
 kubectl describe pods -n $namespace $pod &>> $FILE_LOG
 done < list.txt
 rm list.txt
-# else
-# break
-# fi
 
 # Events
 date >> $FILE_EVENTS
@@ -72,7 +64,6 @@ kubectl describe nodes $(kubectl get pods -o wide | awk '{print $7}') &>> $FILE_
 # PVC/PV/StorageClass
 echo "Есть проблема с PV/PVC? (если да, введи true; если нет, введи false)"
 read isProblem 
-echo $x |tr '[A-Z]' '[a-z]' > $isProblem 
 if $isProblem -eq "true"
 then
 echo "Введите имя pvc: "
@@ -84,7 +75,6 @@ echo "-----------------------------------" &>> $FILE_PVC_PV
 kubectl get pvc $pvc_name -n $pvc_namespace &>> $FILE_PVC_PV
 echo "-----------------------------------" &>> $FILE_PVC_PV
 kubectl get pvc $pvc_name -n $pvc_namespace -o yaml &>> $FILE_PVC_PV
-rm True
 fi
 
 # Operations
