@@ -95,8 +95,3 @@ do
 zip k8s.zip $file
 rm $file
 done
-
-
-
-
-
