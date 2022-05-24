@@ -1,7 +1,6 @@
 #!/bin/zsh
 
 # Скрипт по сбору диагностики с кластера k8s
-# Добавить list-node-groups, list-nodes
 # Файлы: log.txt, events.txt, describe_nodes.txt, pvc_pv.txt, operations.txt
 
 FILE_LOG=log.txt
@@ -22,7 +21,7 @@ done
 date >> $FILE_LOG
 echo "-----------------------------------" >> $FILE_LOG
 echo "Введите cluster-id k8s кластера: "
-read cluster_id > new.txt
+read cluster_id
 # if wc -c new.txt | awk '{print $1}' == 21 
 # then
 echo "-----------------------------------" >> $FILE_LOG
@@ -59,6 +58,10 @@ kubectl get events --all-namespaces  --sort-by='.metadata.creationTimestamp' >> 
 
 # Nodes
 date >> $FILE_NODES
+echo "-----------------------------------" >> $FILE_NODES
+yc managed-kubernetes cluster list-node-groups --id=$cluster_id >> $FILE_NODES
+echo "-----------------------------------" >> $FILE_NODES
+yc managed-kubernetes cluster list-nodes --id=$cluster_id >> $FILE_NODES
 echo "-----------------------------------" >> $FILE_NODES
 kubectl get nodes -o wide >> $FILE_NODES
 echo "-----------------------------------" >> $FILE_NODES
