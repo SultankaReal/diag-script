@@ -19,12 +19,10 @@ done
 # Pods 
 date >> $FILE_LOG
 echo "-----------------------------------" &>> $FILE_LOG
-echo "Введите cluster-id k8s кластера: "
-read cluster_id
+echo "Введите имя k8s кластера: "
+read cluster_name
 echo "Описание кластера: " &>> $FILE_LOG
-yc managed-kubernetes cluster get --id=$cluster_id &>> $FILE_LOG
-echo "Подключаемся к кластеру k8s: " &>> $FILE_LOG
-yc managed-kubernetes cluster get-credentials --id $cluster_id --external --force &>> $FILE_LOG
+yc managed-kubernetes cluster get --name=$cluster_name &>> $FILE_LOG
 echo "Введите тип проблемного ресурса (пример: deployment, daemonset, statefulset и так далее): "
 read resource_type
 echo "Введите имя ресурса (имя deployment-a, daemonset-a, statefulset-a и так далее): "
@@ -53,9 +51,9 @@ kubectl get events --all-namespaces  --sort-by='.metadata.creationTimestamp' &>>
 # Nodes
 date >> $FILE_NODES
 echo "Листинг нод-групп: " &>> $FILE_NODES
-yc managed-kubernetes cluster list-node-groups --id=$cluster_id &>> $FILE_NODES
+yc managed-kubernetes cluster list-node-groups --id=$(yc managed-kubernetes cluster get --name=$cluster_name | head -n 1 | awk '{print $2}') &>> $FILE_NODES
 echo "Листинг нод: " &>> $FILE_NODES
-yc managed-kubernetes cluster list-nodes --id=$cluster_id &>> $FILE_NODES
+yc managed-kubernetes cluster list-nodes --id=$(yc managed-kubernetes cluster get --name=$cluster_name | head -n 1 | awk '{print $2}') &>> $FILE_NODES
 echo "Список нод в кластере: " &>> $FILE_NODES
 kubectl get nodes -o wide &>> $FILE_NODES
 echo "Дескрайб нод: " &>> $FILE_NODES
@@ -83,7 +81,7 @@ fi
 # Operations
 date >> $FILE_OPERATIONS
 echo "Листинг операций в кластера: " &>> $FILE_OPERATIONS
-yc managed-kubernetes cluster list-operations --id=$cluster_id &>> $FILE_OPERATIONS
+yc managed-kubernetes cluster list-operations --id=$(yc managed-kubernetes cluster get --name=$cluster_name | head -n 1 | awk '{print $2}') &>> $FILE_OPERATIONS
 
 # Creating zip-archive and deleting old files
 for file in $files
